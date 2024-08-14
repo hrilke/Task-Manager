@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import spring.project.Task_Manager.DTO.AuthResponse;
 import spring.project.Task_Manager.DTO.LogInRequest;
 import spring.project.Task_Manager.DTO.SignUpRequest;
+import spring.project.Task_Manager.Exception.EmailAlreadyRegisteredException;
 import spring.project.Task_Manager.Model.Constants.Role;
 import spring.project.Task_Manager.Model.User;
 import spring.project.Task_Manager.Repository.UserRepository;
 
 import java.awt.desktop.AboutHandler;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +26,14 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public  void createUser(SignUpRequest signUpRequest) {
+    public void createUser(SignUpRequest signUpRequest) throws EmailAlreadyRegisteredException{
+        Optional<User> userOpt = userRepository.findByEmail(signUpRequest.getEmail());
+        if (!userOpt.isEmpty()) {
+            throw new EmailAlreadyRegisteredException("This Email is already Registered, Try LogIn");
+        }
         User newUser = new User();
             newUser.setEmail(signUpRequest.getEmail());
             newUser.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-            newUser.setFirstName(signUpRequest.getFirstName());
-            newUser.setLastName(signUpRequest.getLastName());
             newUser.setRole(Role.USER);
         userRepository.save(newUser);
     }

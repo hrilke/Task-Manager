@@ -1,13 +1,12 @@
 package spring.project.Task_Manager.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import spring.project.Task_Manager.Model.Constants.Role;
@@ -21,11 +20,12 @@ import java.util.Collection;
 @AllArgsConstructor
 @Table(name = "TMUser")
 public class User extends BaseClass implements UserDetails {
-    private String firstName;
-    private String lastName;
+    @Column(nullable = false, unique = true )
     private String email;
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
     @Override
