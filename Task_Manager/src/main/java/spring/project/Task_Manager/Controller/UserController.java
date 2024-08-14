@@ -2,30 +2,30 @@ package spring.project.Task_Manager.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import spring.project.Task_Manager.DTO.AuthResponse;
+import spring.project.Task_Manager.DTO.LogInRequest;
+import spring.project.Task_Manager.DTO.SignUpRequest;
 import spring.project.Task_Manager.Model.User;
 import spring.project.Task_Manager.Service.UserService;
 
 import java.util.Collections;
 
 @RestController
+@RequestMapping("/auth")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity signUp(@RequestParam String username, String password){
-        User user = userService.createUser(username,password);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<String> signUp(@RequestBody SignUpRequest signUpRequest){
+        userService.createUser(signUpRequest);
+        return ResponseEntity.ok("You have been Successfully Registered, Login to Use the Application");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> logIn(@ RequestParam String username, String password) {
-        String token = userService.loginUser(loginDTO);
-        return ResponseEntity.ok(Collections.singletonMap("token",token));
+    public ResponseEntity<AuthResponse> logIn(@ RequestBody LogInRequest logInRequest) {
+        return ResponseEntity.ok(userService.loginUser(logInRequest));
     }
 
 
