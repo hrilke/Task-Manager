@@ -12,7 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import spring.project.Task_Manager.Repository.UserRepository;
+import spring.project.Task_Manager.Service.Repository.UserRepository;
+
 
 @Configuration
 @EnableWebSecurity

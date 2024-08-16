@@ -1,7 +1,6 @@
 package spring.project.Task_Manager.Service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,9 +11,8 @@ import spring.project.Task_Manager.DTO.SignUpRequest;
 import spring.project.Task_Manager.Exception.EmailAlreadyRegisteredException;
 import spring.project.Task_Manager.Model.Constants.Role;
 import spring.project.Task_Manager.Model.User;
-import spring.project.Task_Manager.Repository.UserRepository;
+import spring.project.Task_Manager.Service.Repository.UserRepository;
 
-import java.awt.desktop.AboutHandler;
 import java.util.Optional;
 
 @Service

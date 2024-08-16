@@ -1,4 +1,4 @@
-package spring.project.Task_Manager.Repository;
+package spring.project.Task_Manager.Service.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import spring.project.Task_Manager.Model.Constants.PriorityLevel;
@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface TaskRepository extends JpaRepository<Task, UUID> {
+public interface TaskRepository extends JpaRepository<Task, Integer> {
     Task findByTitle(String title);
     Task findByDescription(String description);
-    Optional<Task> findById(UUID id);
+    Optional<Task> findById(int id);
     List<Task> findByTaskStatusAndPriorityLevelAndDueDate(TaskStatus status, PriorityLevel level, Instant dueDate);
 
     List<Task> findByTaskStatusAndPriorityLevel(TaskStatus status, PriorityLevel level);

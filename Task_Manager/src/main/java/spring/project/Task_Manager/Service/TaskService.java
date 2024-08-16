@@ -8,26 +8,33 @@ import spring.project.Task_Manager.Exception.NoTaskExistsException;
 import spring.project.Task_Manager.Model.Constants.PriorityLevel;
 import spring.project.Task_Manager.Model.Constants.TaskStatus;
 import spring.project.Task_Manager.Model.Task;
-import spring.project.Task_Manager.Repository.TaskRepository;
+import spring.project.Task_Manager.Service.Repository.TaskRepository;
+import spring.project.Task_Manager.Service.Repository.UserRepository;
 
-import java.time.Instant;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    private UserRepository userRepository;
     public TaskResponse createTask(TaskRequest taskRequest) {
         Task newTask = new Task();
         newTask.setTitle(taskRequest.getTitle());
-        newTask.setTaskStatus(taskRequest.getTaskStatus());
+        if (taskRequest.getTaskStatus() != null) {
+            newTask.setTaskStatus(TaskStatus.fromValue(taskRequest.getTaskStatus()));
+        }
+        if (taskRequest.getPriorityLevel() != null) {
+            newTask.setPriorityLevel(PriorityLevel.fromValue(taskRequest.getPriorityLevel()));
+        }
         newTask.setDescription(taskRequest.getDescription());
         newTask.setDueDate(taskRequest.getDueDate());
-        newTask.setPriorityLevel(taskRequest.getPriorityLevel());
-        newTask.setUserId(taskRequest.getUserId());
+        newTask.setUser(userRepository.findById(taskRequest.getUserId()));
         taskRepository.save(newTask);
         return Task.toTaskResponse(newTask);
     }
@@ -52,20 +59,24 @@ public class TaskService {
         return Task.toTaskResponse(task);
     }
 
-    public TaskResponse updateTask(UUID taskId, TaskRequest taskRequest) throws NoTaskExistsException{
+    public TaskResponse updateTask(int taskId, TaskRequest taskRequest) throws NoTaskExistsException{
         if (!taskRepository.existsById(taskId)) throw new NoTaskExistsException("No Task found by id: "+ taskId);
         Optional<Task> taskOpt = taskRepository.findById(taskId);
         Task existing = taskOpt.get();
-        existing.setTaskStatus(taskRequest.getTaskStatus());
+        if (taskRequest.getTaskStatus() != null) {
+            existing.setTaskStatus(TaskStatus.fromValue(taskRequest.getTaskStatus()));
+        }
+        if (taskRequest.getPriorityLevel() != null) {
+            existing.setPriorityLevel(PriorityLevel.fromValue(taskRequest.getPriorityLevel()));
+        }
         existing.setTitle(taskRequest.getTitle());
         existing.setDescription(taskRequest.getDescription());
         existing.setDueDate(taskRequest.getDueDate());
-        existing.setPriorityLevel(taskRequest.getPriorityLevel());
-        existing.setUserId(taskRequest.getUserId());
+        existing.setUser(userRepository.findById(taskRequest.getUserId()));
         return Task.toTaskResponse(taskRepository.save(existing));
     }
 
-    public Boolean deleteTask(UUID taskId) throws NoTaskExistsException{
+    public Boolean deleteTask(int taskId) throws NoTaskExistsException{
         if (!taskRepository.existsById(taskId)) throw new NoTaskExistsException("No Task found by id: "+ taskId);
             taskRepository.deleteById(taskId);
         return true;

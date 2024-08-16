@@ -25,26 +25,26 @@ public class TaskController {
     public ResponseEntity<TaskResponse> createTask(@RequestBody TaskRequest taskRequest){
         return ResponseEntity.ok(taskService.createTask(taskRequest));
     }
-    @GetMapping("/allTasks")
+    @GetMapping("/alltasks")
     public ResponseEntity<List<TaskResponse>> getAllTasks() {
         return ResponseEntity.ok(taskService.getAllTasks());
     }
-    @GetMapping("/read/{title}")
+    @GetMapping("/read/t/{title}")
     public ResponseEntity<TaskResponse> getTaskByTitle(@PathVariable String title) throws NoTaskExistsException {
         return ResponseEntity.ok(taskService.getTaskByTitle(title));
     }
-    @GetMapping("/read/{description}")
+    @GetMapping("/read/d/{description}")
     public ResponseEntity<TaskResponse> getTaskByDescription(@PathVariable String description) throws NoTaskExistsException {
         return ResponseEntity.ok(taskService.getTaskByDescription(description));
     }
 
     @PutMapping("/update/{id}")
-    public  ResponseEntity<TaskResponse> updateTask(@PathVariable UUID taskId, @RequestBody TaskRequest taskRequest) throws NoTaskExistsException{
+    public  ResponseEntity<TaskResponse> updateTask(@PathVariable int taskId, @RequestBody TaskRequest taskRequest) throws NoTaskExistsException{
         return ResponseEntity.ok(taskService.updateTask(taskId, taskRequest));
     }
 
     @DeleteMapping("/delete/{id}")
-    public  ResponseEntity<Boolean> deleteTask(@PathVariable UUID taskId) throws NoTaskExistsException{
+    public  ResponseEntity<Boolean> deleteTask(@PathVariable int taskId) throws NoTaskExistsException{
         return ResponseEntity.ok(taskService.deleteTask(taskId));
     }
 
